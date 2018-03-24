@@ -14,5 +14,6 @@ import org.seedstack.crud.rest.fixtures.model.Customer;
 import org.seedstack.crud.rest.fixtures.model.CustomerId;
 
 @Path("/customers")
-public class CustomerCrudResource extends BaseCrudResource<Customer, CustomerId, CustomerRepresentation> {
+public class CustomerCrudResource
+    extends BaseCrudResource<Customer, CustomerId, CustomerRepresentation> {
 }

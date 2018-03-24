@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.fixtures.resource;
+package org.seedstack.crud.rest.fixtures.dtoautogen;
 
 import org.seedstack.business.assembler.BaseAssembler;
 import org.seedstack.crud.rest.fixtures.model.Customer;

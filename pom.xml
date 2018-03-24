@@ -79,6 +79,7 @@
 
     <modules>
         <module>rest</module>
+        
     </modules>
 
     <scm>

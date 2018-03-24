@@ -11,23 +11,23 @@ package org.seedstack.crud.rest.fixtures.model;
 import org.seedstack.business.domain.BaseAggregateRoot;
 
 public class Customer extends BaseAggregateRoot<CustomerId> {
-    private final CustomerId id;
-    private int age = 0;
+  private int age = 0;
+  private final CustomerId id;
 
-    public Customer(CustomerId id) {
-        this.id = id;
-    }
+  public Customer(CustomerId id) {
+    this.id = id;
+  }
 
-    @Override
-    public CustomerId getId() {
-        return id;
-    }
+  public int getAge() {
+    return age;
+  }
 
-    public int getAge() {
-        return age;
-    }
+  @Override
+  public CustomerId getId() {
+    return id;
+  }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+  public void setAge(int age) {
+    this.age = age;
+  }
 }

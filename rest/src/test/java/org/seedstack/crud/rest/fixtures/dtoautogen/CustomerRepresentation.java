@@ -6,15 +6,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.fixtures.resource;
+package org.seedstack.crud.rest.fixtures.dtoautogen;
 
 import org.seedstack.business.assembler.AggregateId;
 import org.seedstack.business.assembler.DtoOf;
 import org.seedstack.business.assembler.FactoryArgument;
+import org.seedstack.crud.rest.RestCrud;
 import org.seedstack.crud.rest.fixtures.model.Customer;
 import org.seedstack.crud.rest.fixtures.model.CustomerId;
 
 @DtoOf(Customer.class)
+@RestCrud("autocustomer")
 public class CustomerRepresentation {
   private int age;
   private String firstName;
@@ -49,4 +51,5 @@ public class CustomerRepresentation {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+
 }

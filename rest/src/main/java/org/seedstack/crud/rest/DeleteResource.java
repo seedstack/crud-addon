@@ -18,9 +18,12 @@ import org.seedstack.business.domain.AggregateRoot;
 /**
  * Specialization of {@link Resource} for deleting aggregates (the D of CRUD).
  *
- * @param <A> the aggregate root type.
- * @param <I> the aggregate root identifier type.
- * @param <D> the representation type.
+ * @param <A>
+ *          the aggregate root type.
+ * @param <I>
+ *          the aggregate root identifier type.
+ * @param <D>
+ *          the representation type.
  * @see CreateResource
  * @see ReadResource
  * @see UpdateResource
@@ -28,19 +31,22 @@ import org.seedstack.business.domain.AggregateRoot;
  * @see Resource
  */
 public interface DeleteResource<A extends AggregateRoot<I>, I, D> extends Resource<A, I, D> {
-    /**
-     * The method that implements REST aggregate deletion.
-     *
-     * @param id the identifier of the aggregate to delete, passed as {@code /{id}} path parameter. If the identifier
-     *           type is a complex object, it must have a constructor taking a single {@link String} parameter.
-     */
-    @DELETE
-    @Path("/{id}")
-    default void delete(@PathParam("id") I id) {
-        try {
-            getRepository().remove(id);
-        } catch (AggregateNotFoundException e) {
-            throw new NotFoundException(buildAggregateName(id), e);
-        }
+
+  /**
+   * The method that implements REST aggregate deletion.
+   *
+   * @param id
+   *          the identifier of the aggregate to delete, passed as {@code /{id}} path parameter. If
+   *          the identifier type is a complex object, it must have a constructor taking a single
+   *          {@link String} parameter.
+   */
+  @DELETE
+  @Path("/{id}")
+  default void delete(@PathParam("id") I id) {
+    try {
+      getRepository().remove(id);
+    } catch (AggregateNotFoundException e) {
+      throw new NotFoundException(buildAggregateName(id), e);
     }
+  }
 }

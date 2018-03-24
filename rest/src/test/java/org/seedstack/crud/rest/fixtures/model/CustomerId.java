@@ -10,31 +10,32 @@ package org.seedstack.crud.rest.fixtures.model;
 
 import org.seedstack.business.domain.BaseValueObject;
 
+@SuppressWarnings("serial")
 public class CustomerId extends BaseValueObject {
-    private final String firstName;
-    private final String lastName;
+  private final String firstName;
+  private final String lastName;
 
-    public CustomerId(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+  public CustomerId(String fullName) {
+    String[] split = fullName.split(" ");
+    this.firstName = split[0];
+    this.lastName = split[1];
+  }
 
-    public CustomerId(String fullName) {
-        String[] split = fullName.split(" ");
-        this.firstName = split[0];
-        this.lastName = split[1];
-    }
+  public CustomerId(String firstName, String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
 
-    public String getFirstName() {
-        return firstName;
-    }
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    @Override
-    public String toString() {
-        return firstName + " " + lastName;
-    }
+  @Override
+  public String toString() {
+    return firstName + " " + lastName;
+  }
 }

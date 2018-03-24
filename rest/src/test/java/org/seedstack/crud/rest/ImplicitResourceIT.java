@@ -27,16 +27,20 @@ import org.seedstack.seed.undertow.LaunchWithUndertow;
 
 @RunWith(SeedITRunner.class)
 @LaunchWithUndertow
-public class ExplicitResourceIT {
-  @Inject
-  private Repository<Customer, CustomerId> customerRepository;
+public class ImplicitResourceIT {
+
+  private static final String CUSTOMER_ENDPOINT = "autocustomer";
 
   @Configuration("web.runtime.baseUrl")
+  private String baseUrl;
+
+  @Inject
+  private Repository<Customer, CustomerId> customerRepository;
   private String url;
 
   @Test
   public void attributePaginatedList() {
-    when().get(url + "customers?attribute=id.firstName&value=Michael")
+    when().get(url + "?attribute=id.firstName&value=Michael")
         .then()
         .statusCode(200)
         .body("size", equalTo(1))
@@ -48,31 +52,31 @@ public class ExplicitResourceIT {
     given().body("{\"firstName\":\"Tara\", \"lastName\":\"JOHNSON\"}")
         .contentType("application/json")
         .when()
-        .post(url + "customers")
+        .post(url)
         .then()
         .statusCode(201)
-        .header("Location", url + "customers/Tara%20JOHNSON");
+        .header("Location", url + "/Tara%20JOHNSON");
   }
 
   @Test
   public void delete() {
     when()
-        .get(url + "customers/Robert SMITH")
+        .get(url + "/Robert SMITH")
         .then()
         .statusCode(200);
     when()
-        .delete(url + "customers/Robert SMITH")
+        .delete(url + "/Robert SMITH")
         .then()
         .statusCode(204);
     when()
-        .get(url + "customers/Robert SMITH")
+        .get(url + "/Robert SMITH")
         .then()
         .statusCode(404);
   }
 
   @Test
   public void get() {
-    when().get(url + "customers/Robert SMITH")
+    when().get(url + "/Robert SMITH")
         .then()
         .statusCode(200)
         .body("firstName", equalTo("Robert"))
@@ -81,7 +85,7 @@ public class ExplicitResourceIT {
 
   @Test
   public void list() {
-    when().get(url + "customers")
+    when().get(url)
         .then()
         .statusCode(200)
         .body("[0].firstName", equalTo("Robert"))
@@ -94,7 +98,7 @@ public class ExplicitResourceIT {
 
   @Test
   public void offsetPaginatedList() {
-    when().get(url + "customers?offset=1&limit=2")
+    when().get(url + "?offset=1&limit=2")
         .then()
         .statusCode(200)
         .body("size", equalTo(2))
@@ -103,7 +107,7 @@ public class ExplicitResourceIT {
 
   @Test
   public void pagePaginatedList() {
-    when().get(url + "customers?page=1&limit=2")
+    when().get(url + "?page=1&limit=2")
         .then()
         .statusCode(200)
         .body("size", equalTo(2))
@@ -118,6 +122,7 @@ public class ExplicitResourceIT {
     customerRepository.add(new Customer(new CustomerId("Robert", "SMITH")));
     customerRepository.add(new Customer(new CustomerId("Jeanne", "O'GRADY")));
     customerRepository.add(new Customer(new CustomerId("Michael", "JONES")));
+    url = baseUrl + CUSTOMER_ENDPOINT;
   }
 
   @After
@@ -130,7 +135,7 @@ public class ExplicitResourceIT {
     given().body("{\"firstName\":\"Robert\", \"lastName\":\"SMITH\", \"age\": 35}")
         .contentType("application/json")
         .when()
-        .put(url + "customers/Robert SMITH")
+        .put(url + "/Robert SMITH")
         .then()
         .statusCode(200)
         .body("firstName", equalTo("Robert"))
