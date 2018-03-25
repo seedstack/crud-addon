@@ -12,15 +12,21 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.*;
 
 import javax.inject.Inject;
+
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Repository;
-import org.seedstack.crud.rest.fixtures.model.Customer;
-import org.seedstack.crud.rest.fixtures.model.CustomerId;
+import org.seedstack.crud.rest.fixtures.model.AnimalId;
+import org.seedstack.crud.rest.fixtures.model.create.Dog;
+import org.seedstack.crud.rest.fixtures.model.delete.Bug;
+import org.seedstack.crud.rest.fixtures.model.read.Bird;
+import org.seedstack.crud.rest.fixtures.model.update.Cat;
 import org.seedstack.seed.Configuration;
 import org.seedstack.seed.testing.junit4.SeedITRunner;
 import org.seedstack.seed.undertow.LaunchWithUndertow;
@@ -29,14 +35,34 @@ import org.seedstack.seed.undertow.LaunchWithUndertow;
 @LaunchWithUndertow
 public class ImplicitResourceIT {
 
-  private static final String CUSTOMER_ENDPOINT = "autocustomer";
-
   @Configuration("web.runtime.baseUrl")
-  private String baseUrl;
+  private String url;
 
   @Inject
-  private Repository<Customer, CustomerId> customerRepository;
-  private String url;
+  private Repository<Cat, AnimalId> catRepository;
+  @Inject
+  private Repository<Dog, AnimalId> dogRepository;
+  @Inject
+  private Repository<Bug, AnimalId> bugRepository;
+  @Inject
+  private Repository<Bird, AnimalId> birdRepository;
+
+  @Before
+  public void setUp() {
+    catRepository.add(new Cat(new AnimalId("felix")));
+    bugRepository.add(new Bug(new AnimalId("pesky")));
+    dogRepository.add(new Dog(new AnimalId("pluto")));
+    birdRepository.add(new Bird(new AnimalId("tweety")));
+
+  }
+
+  @After
+  public void tearDown() {
+    catRepository.clear();
+    bugRepository.clear();
+    dogRepository.clear();
+    birdRepository.clear();
+  }
 
   @Test
   public void attributePaginatedList() {
@@ -49,27 +75,44 @@ public class ImplicitResourceIT {
 
   @Test
   public void create() {
-    given().body("{\"firstName\":\"Tara\", \"lastName\":\"JOHNSON\"}")
+
+    long dogRepositorySize = this.dogRepository.size();
+
+    given().body("{\"name\":\"goofy\"}")
         .contentType("application/json")
         .when()
-        .post(url)
+        .post(url + "dogResource")
         .then()
         .statusCode(201)
-        .header("Location", url + "/Tara%20JOHNSON");
+        .header("Location", url + "dogResource/goofy");
+    Assertions.assertThat(dogRepositorySize)
+        .isLessThan(this.dogRepository.size());
+
   }
 
   @Test
   public void delete() {
+    Assertions.assertThat(bugRepository.size()).isEqualTo(1L);
+    String peskyUrl = url + "bugResource/pesky";
     when()
-        .get(url + "/Robert SMITH")
+        .get(peskyUrl)
         .then()
         .statusCode(200);
     when()
-        .delete(url + "/Robert SMITH")
+        .delete(peskyUrl)
         .then()
         .statusCode(204);
     when()
-        .get(url + "/Robert SMITH")
+        .get(peskyUrl)
+        .then()
+        .statusCode(404);
+    Assertions.assertThat(bugRepository.size()).isEqualTo(0L);
+  }
+
+  @Test
+  public void testDeleteInexistent() throws Exception {
+    when()
+        .delete(url + "bugResource/plankton")
         .then()
         .statusCode(404);
   }
@@ -115,19 +158,6 @@ public class ImplicitResourceIT {
         .body("maxSize", equalTo(2))
         .body("totalSize", equalTo(3))
         .body("items", hasSize(2));
-  }
-
-  @Before
-  public void setUp() {
-    customerRepository.add(new Customer(new CustomerId("Robert", "SMITH")));
-    customerRepository.add(new Customer(new CustomerId("Jeanne", "O'GRADY")));
-    customerRepository.add(new Customer(new CustomerId("Michael", "JONES")));
-    url = baseUrl + CUSTOMER_ENDPOINT;
-  }
-
-  @After
-  public void tearDown() {
-    customerRepository.clear();
   }
 
   @Test

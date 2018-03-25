@@ -9,9 +9,10 @@
 package org.seedstack.crud.rest.fixtures.resource;
 
 import javax.ws.rs.Path;
+
 import org.seedstack.crud.rest.BaseCrudResource;
-import org.seedstack.crud.rest.fixtures.model.Customer;
-import org.seedstack.crud.rest.fixtures.model.CustomerId;
+import org.seedstack.crud.rest.fixtures.model.crud.Customer;
+import org.seedstack.crud.rest.fixtures.model.crud.CustomerId;
 
 @Path("/customers")
 public class CustomerCrudResource

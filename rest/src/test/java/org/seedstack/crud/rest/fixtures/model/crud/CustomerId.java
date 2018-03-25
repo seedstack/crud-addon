@@ -6,12 +6,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.fixtures.model;
+package org.seedstack.crud.rest.fixtures.model.crud;
 
 import org.seedstack.business.domain.BaseValueObject;
 
-@SuppressWarnings("serial")
 public class CustomerId extends BaseValueObject {
+
+  private static final long serialVersionUID = 5868144128995404337L;
   private final String firstName;
   private final String lastName;
 

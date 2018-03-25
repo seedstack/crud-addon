@@ -9,7 +9,7 @@
 package org.seedstack.crud.rest.fixtures.resource;
 
 import org.seedstack.business.assembler.BaseAssembler;
-import org.seedstack.crud.rest.fixtures.model.Customer;
+import org.seedstack.crud.rest.fixtures.model.crud.Customer;
 
 public class CustomRepresentationAssembler extends BaseAssembler<Customer, CustomerRepresentation> {
   @Override

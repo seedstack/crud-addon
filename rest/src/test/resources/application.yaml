@@ -9,6 +9,10 @@
 logging:
   loggers:
     org.seedstack.crud.rest.internal.CrudResourceGenerator: DEBUG
+    org.seedstack: TRACE
+    org: TRACE
+    com: TRACE
+    
 classes:
   org:
     seedstack:

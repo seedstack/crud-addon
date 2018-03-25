@@ -11,8 +11,8 @@ package org.seedstack.crud.rest.fixtures.resource;
 import org.seedstack.business.assembler.AggregateId;
 import org.seedstack.business.assembler.DtoOf;
 import org.seedstack.business.assembler.FactoryArgument;
-import org.seedstack.crud.rest.fixtures.model.Customer;
-import org.seedstack.crud.rest.fixtures.model.CustomerId;
+import org.seedstack.crud.rest.fixtures.model.crud.Customer;
+import org.seedstack.crud.rest.fixtures.model.crud.CustomerId;
 
 @DtoOf(Customer.class)
 public class CustomerRepresentation {

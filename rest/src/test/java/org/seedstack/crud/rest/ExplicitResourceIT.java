@@ -14,16 +14,21 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 import javax.inject.Inject;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Repository;
-import org.seedstack.crud.rest.fixtures.model.Customer;
-import org.seedstack.crud.rest.fixtures.model.CustomerId;
+import org.seedstack.crud.rest.fixtures.model.crud.Customer;
+import org.seedstack.crud.rest.fixtures.model.crud.CustomerId;
 import org.seedstack.seed.Configuration;
 import org.seedstack.seed.testing.junit4.SeedITRunner;
 import org.seedstack.seed.undertow.LaunchWithUndertow;
+
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.response.ValidatableResponseLogSpec;
 
 @RunWith(SeedITRunner.class)
 @LaunchWithUndertow
@@ -68,6 +73,23 @@ public class ExplicitResourceIT {
         .get(url + "customers/Robert SMITH")
         .then()
         .statusCode(404);
+  }
+
+  @Test
+  public void deleteInexistent() {
+  /*  when()
+        .get(url + "customers/Robert DENIRO")
+        .then()
+        .statusCode(404);*/
+    ValidatableResponseLogSpec<ValidatableResponse, Response> log = when()
+        .delete(url + "customers/Robert DENIRO")
+        .then()
+        .log();
+
+    System.err.println(log.everything().toString());
+
+    // .statusCode(404);
+
   }
 
   @Test
