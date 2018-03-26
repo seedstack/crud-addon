@@ -6,10 +6,10 @@ import org.seedstack.crud.rest.fixtures.model.AnimalId;
 public class Bird implements AggregateRoot<AnimalId> {
 
   private Long daysInHome;
-  private AnimalId dogId;
+  private AnimalId name;
 
   public Bird(AnimalId id) {
-    this.dogId = id;
+    this.name = id;
   }
 
   public Long getDaysInHome() {
@@ -18,7 +18,7 @@ public class Bird implements AggregateRoot<AnimalId> {
 
   @Override
   public AnimalId getId() {
-    return dogId;
+    return name;
   }
 
   public void setDaysInHome(Long daysInHome) {

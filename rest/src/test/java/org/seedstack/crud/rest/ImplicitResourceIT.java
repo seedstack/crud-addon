@@ -68,7 +68,7 @@ public class ImplicitResourceIT {
 
   @Test
   public void attributePaginatedList() {
-    when().get(url + "?attribute=id.firstName&value=Michael")
+    when().get(url + "Bird?attribute=name.petname&value=tweety")
         .then()
         .statusCode(200)
         .body("size", equalTo(1))
@@ -140,7 +140,7 @@ public class ImplicitResourceIT {
 
   @Test
   public void offsetPaginatedList() {
-    when().get(url + "?offset=1&limit=2")
+    when().get(url + "Bird?offset=1&limit=2")
         .then()
         .statusCode(200)
         .body("size", equalTo(2))
@@ -149,7 +149,7 @@ public class ImplicitResourceIT {
 
   @Test
   public void pagePaginatedList() {
-    when().get(url + "?page=1&limit=2")
+    when().get(url + "Bird?page=1&limit=2")
         .then()
         .statusCode(200)
         .body("size", equalTo(2))
@@ -161,14 +161,13 @@ public class ImplicitResourceIT {
 
   @Test
   public void update() {
-    given().body("{\"firstName\":\"Robert\", \"lastName\":\"SMITH\", \"age\": 35}")
+    given().body("{\"name\":\"felix\", \"daysInHome\": 35}")
         .contentType("application/json")
         .when()
-        .put(url + "/Robert SMITH")
+        .put(url + "catResource/felix")
         .then()
         .statusCode(200)
-        .body("firstName", equalTo("Robert"))
-        .body("lastName", equalTo("SMITH"))
-        .body("age", equalTo(35));
+        .body("name", equalTo("felix"))
+        .body("daysInHome", equalTo(35));
   }
 }
