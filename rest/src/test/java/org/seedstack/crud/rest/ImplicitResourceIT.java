@@ -53,6 +53,8 @@ public class ImplicitResourceIT {
     bugRepository.add(new Bug(new AnimalId("pesky")));
     dogRepository.add(new Dog(new AnimalId("pluto")));
     birdRepository.add(new Bird(new AnimalId("tweety")));
+    birdRepository.add(new Bird(new AnimalId("woodstock")));
+    birdRepository.add(new Bird(new AnimalId("road runner")));
 
   }
 
@@ -119,24 +121,21 @@ public class ImplicitResourceIT {
 
   @Test
   public void get() {
-    when().get(url + "/Robert SMITH")
+    when().get(url + "Bird/tweety")
         .then()
         .statusCode(200)
-        .body("firstName", equalTo("Robert"))
-        .body("lastName", equalTo("SMITH"));
+        .body("name", equalTo("tweety"));
   }
 
   @Test
   public void list() {
-    when().get(url)
+    when().get(url + "Bird")
         .then()
         .statusCode(200)
-        .body("[0].firstName", equalTo("Robert"))
-        .body("[0].lastName", equalTo("SMITH"))
-        .body("[1].firstName", equalTo("Jeanne"))
-        .body("[1].lastName", equalTo("O'GRADY"))
-        .body("[2].firstName", equalTo("Michael"))
-        .body("[2].lastName", equalTo("JONES"));
+        .body("[0].name", equalTo("road runner"))
+        .body("[1].name", equalTo("tweety"))
+        .body("[2].name", equalTo("woodstock"));
+
   }
 
   @Test

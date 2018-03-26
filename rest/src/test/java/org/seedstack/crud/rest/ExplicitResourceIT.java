@@ -77,10 +77,9 @@ public class ExplicitResourceIT {
 
   @Test
   public void deleteInexistent() {
-  /*  when()
-        .get(url + "customers/Robert DENIRO")
-        .then()
-        .statusCode(404);*/
+    /*
+     * when() .get(url + "customers/Robert DENIRO") .then() .statusCode(404);
+     */
     ValidatableResponseLogSpec<ValidatableResponse, Response> log = when()
         .delete(url + "customers/Robert DENIRO")
         .then()

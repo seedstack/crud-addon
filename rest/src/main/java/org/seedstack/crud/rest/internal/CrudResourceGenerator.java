@@ -150,7 +150,8 @@ class CrudResourceGenerator {
           interfaceClassTypes.toArray(new ClassType[interfaceClassTypes.size()]));
       resource.setGenericSignature(classSignature.encode());
 
-      addPathAnnotation(resource, restAnnotation, resource.getSimpleName().replace("Resource", ""));
+      addPathAnnotation(resource, restAnnotation,
+          generateClassName(dtoClass).replace("Resource", ""));
       resource.addConstructor(createConstructor(resource.getClassFile().getConstPool(),
           resource,
           aggregateRootClass,
@@ -212,7 +213,14 @@ class CrudResourceGenerator {
   }
 
   private CtClass createClass(Class<?> baseDto) {
-    return classPool.makeClass(generateClassName(baseDto));
+    // Adding uniqueness to the class allows the test suite to execute.
+    // On a production/development environment should make no difference
+
+    final String className = String.format(GENERATED_CLASS_NAME_TEMPLATE,
+        generateClassName(baseDto));
+
+    return classPool.makeClass(ProxyFactory.nameGenerator
+        .get(className));
   }
 
   @SuppressWarnings("rawtypes")
@@ -241,10 +249,7 @@ class CrudResourceGenerator {
     if (regexMatcher.matches() && regexMatcher.groupCount() > 1) {
       resourceName = regexMatcher.group(1);
     }
-    // Adding uniqueness to the class allows the test suite to execute.
-    // On a production/development environment should make no difference
-    return ProxyFactory.nameGenerator
-        .get(String.format(GENERATED_CLASS_NAME_TEMPLATE, resourceName));
+    return resourceName;
   }
 
   private void prepareImports() {
