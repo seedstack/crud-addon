@@ -78,6 +78,7 @@ public interface ReadResource<A extends AggregateRoot<I>, I, D> extends Resource
      * {@link PaginationParams} query parameters.
      *
      * @param paginationParams the optional pagination parameters.
+     * @param sortParams       the optional sorting parameters.
      * @return the serialized stream of aggregates, enveloped in a pagination wrapper if necessary.
      */
     @GET

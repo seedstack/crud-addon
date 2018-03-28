@@ -38,6 +38,7 @@ public interface UpdateResource<A extends AggregateRoot<I>, I, D> extends Resour
      *                       the identifier type is a complex object, it must have a constructor taking a single
      *                       {@link String} parameter.
      * @param representation the updated representation of the aggregate as JSON request body.
+     * @return the updated representation.
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
