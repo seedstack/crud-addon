@@ -9,7 +9,6 @@
 package org.seedstack.crud.rest.internal;
 
 import java.lang.reflect.Modifier;
-
 import org.kametic.specifications.AbstractSpecification;
 import org.seedstack.business.assembler.DtoOf;
 import org.seedstack.crud.rest.RestCrud;
@@ -19,26 +18,26 @@ import org.seedstack.shed.reflect.ClassPredicates;
 /***
  * This specification matches any class that is annotated with {@link RestCrud} and is a
  * {@link DtoOf}.
- * 
+ *
  * @author Sherpard2
- * 
+ *
  */
 class CrudResourceSpecification extends AbstractSpecification<Class<?>> {
 
-  static final CrudResourceSpecification INSTANCE = new CrudResourceSpecification();
+    static final CrudResourceSpecification INSTANCE = new CrudResourceSpecification();
 
-  private CrudResourceSpecification() {
-    // no instantiation allowed
-  }
+    private CrudResourceSpecification() {
+        // no instantiation allowed
+    }
 
-  @Override
-  public boolean isSatisfiedBy(Class<?> candidate) {
+    @Override
+    public boolean isSatisfiedBy(Class<?> candidate) {
 
-    return AnnotationPredicates.classOrAncestorAnnotatedWith(RestCrud.class, false)
-        .and(AnnotationPredicates.classOrAncestorAnnotatedWith(DtoOf.class, false))
-        .and(ClassPredicates
-            .classModifierIs(Modifier.ABSTRACT).negate())
-        .test(candidate);
+        return AnnotationPredicates.classOrAncestorAnnotatedWith(RestCrud.class, false)
+                .and(AnnotationPredicates.classOrAncestorAnnotatedWith(DtoOf.class, false))
+                .and(ClassPredicates
+                        .classModifierIs(Modifier.ABSTRACT).negate())
+                .test(candidate);
 
-  }
+    }
 }

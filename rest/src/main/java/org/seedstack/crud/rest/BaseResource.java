@@ -18,72 +18,70 @@ import org.seedstack.business.internal.utils.BusinessUtils;
 import org.seedstack.business.pagination.dsl.Paginator;
 
 //TODO:Test BaseResource Alone
+
 /**
  * This base class for CRUD resources provides the necessary infrastructure without defining any
  * JAX-RS mapping. It can be used as a base to selectively combine CRUD operations in a class which
  * would implement one or more of the {@link CreateResource}, {@link ReadResource},
  * {@link UpdateResource} and {@link DeleteResource} interfaces.
  *
- * @param <A>
- *          the aggregate root type.
- * @param <I>
- *          the aggregate root identifier type.
- * @param <D>
- *          the representation type.
+ * @param <A> the aggregate root type.
+ * @param <I> the aggregate root identifier type.
+ * @param <D> the representation type.
  */
 public abstract class BaseResource<A extends AggregateRoot<I>, I, D> implements Resource<A, I, D> {
-  private final Class<A> aggregateRootClass;
-  @Inject
-  private DomainRegistry domainRegistry;
-  @Inject
-  private FluentAssembler fluentAssembler;
-  private final Class<I> identifierClass;
-  @Inject
-  private Paginator paginator;
-  private final Class<D> representationClass;
+    private final Class<A> aggregateRootClass;
+    private final Class<I> identifierClass;
+    private final Class<D> representationClass;
+    @Inject
+    private DomainRegistry domainRegistry;
+    @Inject
+    private FluentAssembler fluentAssembler;
+    @Inject
+    private Paginator paginator;
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  protected BaseResource() {
-    Type[] generics = BusinessUtils.resolveGenerics(BaseResource.class, this.getClass());
-    this.aggregateRootClass = (Class) generics[0];
-    this.identifierClass = (Class) generics[1];
-    this.representationClass = (Class) generics[2];
-  }
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    protected BaseResource() {
+        Type[] generics = BusinessUtils.resolveGenerics(BaseResource.class, this.getClass());
+        this.aggregateRootClass = (Class) generics[0];
+        this.identifierClass = (Class) generics[1];
+        this.representationClass = (Class) generics[2];
+    }
 
-  protected BaseResource(Class<A> aggregateRootClass, Class<I> identifierClass,
-      Class<D> representationClass) {
-    this.aggregateRootClass = aggregateRootClass;
-    this.identifierClass = identifierClass;
-    this.representationClass = representationClass;
-  }
+    protected BaseResource(Class<A> aggregateRootClass, Class<I> identifierClass,
+            Class<D> representationClass) {
+        this.aggregateRootClass = aggregateRootClass;
+        this.identifierClass = identifierClass;
+        this.representationClass = representationClass;
+    }
 
-  @Override
-  public Class<A> getAggregateRootClass() {
-    return aggregateRootClass;
-  }
+    @Override
+    public Class<A> getAggregateRootClass() {
+        return aggregateRootClass;
+    }
 
-  @Override
-  public FluentAssembler getFluentAssembler() {
-    return fluentAssembler;
-  }
+    @Override
+    public FluentAssembler getFluentAssembler() {
+        return fluentAssembler;
+    }
 
-  @Override
-  public Class<I> getIdentifierClass() {
-    return identifierClass;
-  }
+    @Override
+    public Class<I> getIdentifierClass() {
+        return identifierClass;
+    }
 
-  @Override
-  public Paginator getPaginator() {
-    return paginator;
-  }
+    @Override
+    public Paginator getPaginator() {
+        return paginator;
+    }
 
-  @Override
-  public Repository<A, I> getRepository() {
-    return domainRegistry.getRepository(aggregateRootClass, identifierClass);
-  }
+    @Override
+    public Repository<A, I> getRepository() {
+        return domainRegistry.getRepository(aggregateRootClass, identifierClass);
+    }
 
-  @Override
-  public Class<D> getRepresentationClass() {
-    return representationClass;
-  }
+    @Override
+    public Class<D> getRepresentationClass() {
+        return representationClass;
+    }
 }

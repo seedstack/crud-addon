@@ -6,11 +6,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.internal;
+package org.seedstack.crud.rest.fixtures.rest.animal;
 
-import org.seedstack.shed.exception.ErrorCode;
+import org.seedstack.crud.rest.fixtures.model.animal.Cat;
 
-public enum CrudRestErrorCode implements ErrorCode {
-    CRUD_REPOSITORY_GENERATION_FAILED, DTO_ANNOTATION_NOT_FOUND,
-    DTO_HAS_NO_TARGET, REST_CRUD_ANNOTATION_NOT_FOUND, TUPLES_NOT_SUPPORTED
+public class CatRepresentationAssembler extends AnimalRepresentationAssembler<Cat, CatRepresentation> {
 }

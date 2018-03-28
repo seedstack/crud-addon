@@ -6,13 +6,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-logging:
-  loggers:
-    org.seedstack.crud.rest.internal.CrudResourceGenerator: DEBUG
-    org.seedstack: TRACE
-    org: TRACE
-    com: TRACE
-    
+logging: INFO
+
+rest:
+  jerseyProperties:
+    jersey.config.servlet.filter.forwardOn404: false
+
 classes:
   org:
     seedstack:

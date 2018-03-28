@@ -16,68 +16,64 @@ import org.seedstack.business.pagination.dsl.Paginator;
 /**
  * Common interface shared by all CRUD-specialized interfaces.
  *
- * @param <A>
- *          the aggregate root type.
- * @param <I>
- *          the aggregate root identifier type.
- * @param <D>
- *          the representation type.
+ * @param <A> the aggregate root type.
+ * @param <I> the aggregate root identifier type.
+ * @param <D> the representation type.
  * @see CreateResource
  * @see ReadResource
  * @see UpdateResource
  * @see DeleteResource
  */
 public interface Resource<A extends AggregateRoot<I>, I, D> {
-  /**
-   * Builds the standardized name of the aggregate for a particular id.
-   *
-   * @param id
-   *          the aggregate identifier.
-   * @return the aggregate name.
-   */
-  default String buildAggregateName(I id) {
-    return getAggregateRootClass().getSimpleName() + "[" + id + "]";
-  }
+    /**
+     * Builds the standardized name of the aggregate for a particular id.
+     *
+     * @param id the aggregate identifier.
+     * @return the aggregate name.
+     */
+    default String buildAggregateName(I id) {
+        return getAggregateRootClass().getSimpleName() + "[" + id + "]";
+    }
 
-  /**
-   * Returns the aggregate root class managed by the resource.
-   *
-   * @return the aggregate root class.
-   */
-  Class<A> getAggregateRootClass();
+    /**
+     * Returns the aggregate root class managed by the resource.
+     *
+     * @return the aggregate root class.
+     */
+    Class<A> getAggregateRootClass();
 
-  /**
-   * Returns the {@link FluentAssembler} implementation used by the resource.
-   *
-   * @return the {@link FluentAssembler} implementation.
-   */
-  FluentAssembler getFluentAssembler();
+    /**
+     * Returns the {@link FluentAssembler} implementation used by the resource.
+     *
+     * @return the {@link FluentAssembler} implementation.
+     */
+    FluentAssembler getFluentAssembler();
 
-  /**
-   * Returns the aggregate root identifier class managed by the resource.
-   *
-   * @return the aggregate root identifier class.
-   */
-  Class<I> getIdentifierClass();
+    /**
+     * Returns the aggregate root identifier class managed by the resource.
+     *
+     * @return the aggregate root identifier class.
+     */
+    Class<I> getIdentifierClass();
 
-  /**
-   * Returns the {@link Paginator} implementation used by the resource.
-   *
-   * @return the {@link Paginator} implementation.
-   */
-  Paginator getPaginator();
+    /**
+     * Returns the {@link Paginator} implementation used by the resource.
+     *
+     * @return the {@link Paginator} implementation.
+     */
+    Paginator getPaginator();
 
-  /**
-   * Returns the repository where to find aggregates managed by the resource.
-   *
-   * @return the repository of managed aggregates.
-   */
-  Repository<A, I> getRepository();
+    /**
+     * Returns the repository where to find aggregates managed by the resource.
+     *
+     * @return the repository of managed aggregates.
+     */
+    Repository<A, I> getRepository();
 
-  /**
-   * Returns the representation class managed by the resource.
-   *
-   * @return the representation class.
-   */
-  Class<D> getRepresentationClass();
+    /**
+     * Returns the representation class managed by the resource.
+     *
+     * @return the representation class.
+     */
+    Class<D> getRepresentationClass();
 }
