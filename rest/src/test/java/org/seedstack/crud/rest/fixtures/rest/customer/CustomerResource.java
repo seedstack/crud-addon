@@ -6,13 +6,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.fixtures.resource;
+package org.seedstack.crud.rest.fixtures.rest.customer;
 
 import javax.ws.rs.Path;
 import org.seedstack.crud.rest.BaseCrudResource;
-import org.seedstack.crud.rest.fixtures.model.Customer;
-import org.seedstack.crud.rest.fixtures.model.CustomerId;
+import org.seedstack.crud.rest.fixtures.model.customer.Customer;
+import org.seedstack.crud.rest.fixtures.model.customer.CustomerId;
 
 @Path("/customers")
-public class CustomerCrudResource extends BaseCrudResource<Customer, CustomerId, CustomerRepresentation> {
+public class CustomerResource
+        extends BaseCrudResource<Customer, CustomerId, CustomerRepresentation> {
 }

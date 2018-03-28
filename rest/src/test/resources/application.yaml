@@ -6,6 +6,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+logging: INFO
+
+rest:
+  jerseyProperties:
+    jersey.config.servlet.filter.forwardOn404: false
+
 classes:
   org:
     seedstack:

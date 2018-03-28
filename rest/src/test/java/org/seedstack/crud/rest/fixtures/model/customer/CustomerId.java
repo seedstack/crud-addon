@@ -6,23 +6,25 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.fixtures.model;
+package org.seedstack.crud.rest.fixtures.model.customer;
 
 import org.seedstack.business.domain.BaseValueObject;
 
 public class CustomerId extends BaseValueObject {
+
+    private static final long serialVersionUID = 5868144128995404337L;
     private final String firstName;
     private final String lastName;
-
-    public CustomerId(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 
     public CustomerId(String fullName) {
         String[] split = fullName.split(" ");
         this.firstName = split[0];
         this.lastName = split[1];
+    }
+
+    public CustomerId(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getFirstName() {

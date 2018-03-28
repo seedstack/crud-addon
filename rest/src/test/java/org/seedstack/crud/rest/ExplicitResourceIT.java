@@ -11,6 +11,7 @@ package org.seedstack.crud.rest;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 
 import javax.inject.Inject;
@@ -19,8 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Repository;
-import org.seedstack.crud.rest.fixtures.model.Customer;
-import org.seedstack.crud.rest.fixtures.model.CustomerId;
+import org.seedstack.crud.rest.fixtures.model.customer.Customer;
+import org.seedstack.crud.rest.fixtures.model.customer.CustomerId;
 import org.seedstack.seed.Configuration;
 import org.seedstack.seed.testing.junit4.SeedITRunner;
 import org.seedstack.seed.undertow.LaunchWithUndertow;
@@ -28,10 +29,11 @@ import org.seedstack.seed.undertow.LaunchWithUndertow;
 @RunWith(SeedITRunner.class)
 @LaunchWithUndertow
 public class ExplicitResourceIT {
-    @Configuration("web.runtime.baseUrl")
-    private String url;
     @Inject
     private Repository<Customer, CustomerId> customerRepository;
+
+    @Configuration("web.runtime.baseUrl")
+    private String url;
 
     @Before
     public void setUp() {
@@ -46,58 +48,6 @@ public class ExplicitResourceIT {
     }
 
     @Test
-    public void get() {
-        when().get(url + "customers/Robert SMITH")
-                .then()
-                .statusCode(200)
-                .body("firstName", equalTo("Robert"))
-                .body("lastName", equalTo("SMITH"));
-    }
-
-    @Test
-    public void list() {
-        when().get(url + "customers")
-                .then()
-                .statusCode(200)
-                .body("[0].firstName", equalTo("Robert"))
-                .body("[0].lastName", equalTo("SMITH"))
-                .body("[1].firstName", equalTo("Jeanne"))
-                .body("[1].lastName", equalTo("O'GRADY"))
-                .body("[2].firstName", equalTo("Michael"))
-                .body("[2].lastName", equalTo("JONES"));
-    }
-
-    @Test
-    public void pagePaginatedList() {
-        when().get(url + "customers?page=1&limit=2")
-                .then()
-                .statusCode(200)
-                .body("size", equalTo(2))
-                .body("index", equalTo(1))
-                .body("maxSize", equalTo(2))
-                .body("totalSize", equalTo(3))
-                .body("items", hasSize(2));
-    }
-
-    @Test
-    public void offsetPaginatedList() {
-        when().get(url + "customers?offset=1&limit=2")
-                .then()
-                .statusCode(200)
-                .body("size", equalTo(2))
-                .body("items", hasSize(2));
-    }
-
-    @Test
-    public void attributePaginatedList() {
-        when().get(url + "customers?attribute=id.firstName&value=Michael")
-                .then()
-                .statusCode(200)
-                .body("size", equalTo(1))
-                .body("items", hasSize(1));
-    }
-
-    @Test
     public void create() {
         given().body("{\"firstName\":\"Tara\", \"lastName\":\"JOHNSON\"}")
                 .contentType("application/json")
@@ -106,6 +56,26 @@ public class ExplicitResourceIT {
                 .then()
                 .statusCode(201)
                 .header("Location", url + "customers/Tara%20JOHNSON");
+    }
+
+    @Test
+    public void delete() {
+        when()
+                .delete(url + "customers/Robert DENIRO")
+                .then()
+                .statusCode(404);
+        when()
+                .get(url + "customers/Robert SMITH")
+                .then()
+                .statusCode(200);
+        when()
+                .delete(url + "customers/Robert SMITH")
+                .then()
+                .statusCode(204);
+        when()
+                .get(url + "customers/Robert SMITH")
+                .then()
+                .statusCode(404);
     }
 
     @Test
@@ -122,18 +92,53 @@ public class ExplicitResourceIT {
     }
 
     @Test
-    public void delete() {
-        when()
-                .get(url + "customers/Robert SMITH")
+    public void get() {
+        when().get(url + "customers/Robert SMITH")
                 .then()
-                .statusCode(200);
-        when()
-                .delete(url + "customers/Robert SMITH")
+                .statusCode(200)
+                .body("firstName", equalTo("Robert"))
+                .body("lastName", equalTo("SMITH"));
+    }
+
+    @Test
+    public void list() {
+        when().get(url + "customers?sort=id.firstName")
                 .then()
-                .statusCode(204);
-        when()
-                .get(url + "customers/Robert SMITH")
+                .statusCode(200)
+                .body("$", hasSize(3))
+                .body("firstName", contains("Jeanne", "Michael", "Robert"));
+    }
+
+    @Test
+    public void offsetPaginatedList() {
+        when().get(url + "customers?sort=id.firstName&offset=1&limit=2")
                 .then()
-                .statusCode(404);
+                .statusCode(200)
+                .body("size", equalTo(2))
+                .body("items", hasSize(2))
+                .body("items.firstName", contains("Michael", "Robert"));
+    }
+
+    @Test
+    public void pagePaginatedList() {
+        when().get(url + "customers?sort=id.firstName&page=1&limit=2")
+                .then()
+                .statusCode(200)
+                .body("size", equalTo(2))
+                .body("index", equalTo(1))
+                .body("maxSize", equalTo(2))
+                .body("totalSize", equalTo(3))
+                .body("items", hasSize(2))
+                .body("items.firstName", contains("Jeanne", "Michael"));
+    }
+
+    @Test
+    public void attributePaginatedList() {
+        when().get(url + "customers?sort=id.firstName&attribute=id.firstName&value=Jeanne&limit=2")
+                .then()
+                .statusCode(200)
+                .body("size", equalTo(2))
+                .body("items", hasSize(2))
+                .body("items.firstName", contains("Michael", "Robert"));
     }
 }

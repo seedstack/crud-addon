@@ -11,56 +11,20 @@ package org.seedstack.crud.rest;
 import javax.ws.rs.QueryParam;
 
 /**
- * Groups all JAX-RS query parameters supporting the various pagination modes (attribute based, offset-based and
- * page-based).
+ * Groups all JAX-RS query parameters supporting the various pagination modes (attribute based,
+ * offset-based and page-based).
  */
 public class PaginationParams {
     @QueryParam("attribute")
     private String attribute;
-    @QueryParam("value")
-    private String value;
+    @QueryParam("limit")
+    private Long limit;
     @QueryParam("offset")
     private Long offset;
     @QueryParam("page")
     private Long page;
-    @QueryParam("limit")
-    private Long limit;
-
-    /**
-     * Returns if pagination should be enabled.
-     *
-     * @return true if pagination should be enabled, false otherwise.
-     */
-    public boolean isPaginating() {
-        return isAttributeBased() || isPageBased() || isOffsetBased();
-    }
-
-    /**
-     * Returns if pagination is attribute based.
-     *
-     * @return true if pagination is attribute based, false otherwise.
-     */
-    public boolean isAttributeBased() {
-        return attribute != null;
-    }
-
-    /**
-     * Returns if pagination is page based.
-     *
-     * @return true if pagination is page based, false otherwise.
-     */
-    public boolean isPageBased() {
-        return page != null;
-    }
-
-    /**
-     * Returns if pagination is offset based.
-     *
-     * @return true if pagination is offset based, false otherwise.
-     */
-    public boolean isOffsetBased() {
-        return offset != null;
-    }
+    @QueryParam("value")
+    private String value;
 
     /**
      * If pagination is attribute-based, returns the attribute that should be used.
@@ -72,12 +36,12 @@ public class PaginationParams {
     }
 
     /**
-     * If pagination is attribute-based, returns the value that should act as the upper value.
+     * Returns the limit if it has been specified.
      *
-     * @return the value used as the upper value for attribute-based pagination.
+     * @return the limit if specified, null otherwise.
      */
-    public String getValue() {
-        return value;
+    public Long getLimit() {
+        return limit;
     }
 
     /**
@@ -90,13 +54,22 @@ public class PaginationParams {
     }
 
     /**
-     * If pagination is page-based, returns the index of the page. Whether this index is 0-based or 1-based, depends
-     * on the business framework configuration.
+     * If pagination is page-based, returns the index of the page. Whether this index is 0-based or
+     * 1-based, depends on the business framework configuration.
      *
      * @return the index of the page.
      */
     public Long getPage() {
         return page;
+    }
+
+    /**
+     * If pagination is attribute-based, returns the value that should act as the upper value.
+     *
+     * @return the value used as the upper value for attribute-based pagination.
+     */
+    public String getValue() {
+        return value;
     }
 
     /**
@@ -109,11 +82,38 @@ public class PaginationParams {
     }
 
     /**
-     * Returns the limit if it has been specified.
+     * Returns if pagination is attribute based.
      *
-     * @return the limit if specified, null otherwise.
+     * @return true if pagination is attribute based, false otherwise.
      */
-    public Long getLimit() {
-        return limit;
+    public boolean isAttributeBased() {
+        return attribute != null;
+    }
+
+    /**
+     * Returns if pagination is offset based.
+     *
+     * @return true if pagination is offset based, false otherwise.
+     */
+    public boolean isOffsetBased() {
+        return offset != null;
+    }
+
+    /**
+     * Returns if pagination is page based.
+     *
+     * @return true if pagination is page based, false otherwise.
+     */
+    public boolean isPageBased() {
+        return page != null;
+    }
+
+    /**
+     * Returns if pagination should be enabled.
+     *
+     * @return true if pagination should be enabled, false otherwise.
+     */
+    public boolean hasPagination() {
+        return isAttributeBased() || isPageBased() || isOffsetBased();
     }
 }

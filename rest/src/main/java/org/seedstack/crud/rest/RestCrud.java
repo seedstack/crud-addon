@@ -23,18 +23,18 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 public @interface RestCrud {
     /**
-     * The path the CRUD resource should be exposed on.
-     *
-     * @return the resource path.
-     */
-    String value() default "";
-
-    /**
      * Defines if the generated resource should allow creation.
      *
      * @return true if creation is allowed, false otherwise.
      */
     boolean create() default true;
+
+    /**
+     * Defines if the generated resource should allow deletion.
+     *
+     * @return true if deletion is allowed, false otherwise.
+     */
+    boolean delete() default true;
 
     /**
      * Defines if the generated resource should allow reading.
@@ -51,9 +51,9 @@ public @interface RestCrud {
     boolean update() default true;
 
     /**
-     * Defines if the generated resource should allow deletion.
+     * The path the CRUD resource should be exposed on.
      *
-     * @return true if deletion is allowed, false otherwise.
+     * @return the resource path.
      */
-    boolean delete() default true;
+    String value() default "";
 }

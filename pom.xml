@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.1</version>
     </parent>
 
     <groupId>org.seedstack.addons.crud</groupId>
@@ -23,7 +23,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <seed.version>3.5.0-SNAPSHOT</seed.version>
+        <seed.version>3.5.0</seed.version>
         <business.version>4.2.1-SNAPSHOT</business.version>
         <modelmapper-addon.version>1.0.0</modelmapper-addon.version>
 
@@ -62,8 +62,7 @@
                             <licenseMerge>BSD|The New BSD License</licenseMerge>
                             <licenseMerge>BSD|BSD License</licenseMerge>
                             <licenseMerge>CDDL|CDDL + GPLv2 with classpath exception</licenseMerge>
-                            <licenseMerge>CDDL|GNU General Public License, Version 2 with the Classpath Exception
-                            </licenseMerge>
+                            <licenseMerge>CDDL|GNU General Public License, Version 2 with the Classpath Exception</licenseMerge>
                             <licenseMerge>CDDL|Common Development and Distribution License</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser Public License</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser General Public License</licenseMerge>

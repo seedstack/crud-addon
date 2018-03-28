@@ -4,6 +4,8 @@
 
 Business framework extension to automatically expose CRUD APIs of any DTO.
 
+See [PEP-007](https://github.com/seedstack/pep/blob/master/pep-007-business-rest-crud.md) for more info
+
 # Copyright and license
 
 This source code is copyrighted by [The SeedStack Authors](https://github.com/seedstack/seedstack/blob/master/AUTHORS) and

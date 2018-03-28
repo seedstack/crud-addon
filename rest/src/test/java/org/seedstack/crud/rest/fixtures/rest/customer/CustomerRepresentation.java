@@ -6,19 +6,33 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.fixtures.resource;
+package org.seedstack.crud.rest.fixtures.rest.customer;
 
 import org.seedstack.business.assembler.AggregateId;
 import org.seedstack.business.assembler.DtoOf;
 import org.seedstack.business.assembler.FactoryArgument;
-import org.seedstack.crud.rest.fixtures.model.Customer;
-import org.seedstack.crud.rest.fixtures.model.CustomerId;
+import org.seedstack.crud.rest.fixtures.model.customer.Customer;
+import org.seedstack.crud.rest.fixtures.model.customer.CustomerId;
 
 @DtoOf(Customer.class)
 public class CustomerRepresentation {
+    private int age;
     private String firstName;
     private String lastName;
-    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @AggregateId
+    @FactoryArgument
+    public CustomerId getCustomerId() {
+        return new CustomerId(firstName, lastName);
+    }
 
     public String getFirstName() {
         return firstName;
@@ -34,19 +48,5 @@ public class CustomerRepresentation {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    @AggregateId
-    @FactoryArgument
-    public CustomerId getCustomerId() {
-        return new CustomerId(firstName, lastName);
     }
 }

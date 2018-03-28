@@ -11,14 +11,15 @@ package org.seedstack.crud.rest;
 import org.seedstack.business.domain.AggregateRoot;
 
 /**
- * Base class implementing all the CRUD operations. Extend this class when all CRUD operations should be exposed for
- * a particular aggregate/representation couple.
+ * Base class implementing all the CRUD operations. Extend this class when all CRUD operations
+ * should be exposed for a particular aggregate/representation couple.
  *
  * @param <A> the aggregate root type.
  * @param <I> the aggregate root identifier type.
  * @param <D> the representation type.
  */
-public abstract class BaseCrudResource<A extends AggregateRoot<I>, I, D> extends BaseResource<A, I, D> implements
+public abstract class BaseCrudResource<A extends AggregateRoot<I>, I, D>
+        extends BaseResource<A, I, D> implements
         CreateResource<A, I, D>,
         ReadResource<A, I, D>,
         UpdateResource<A, I, D>,
@@ -28,7 +29,8 @@ public abstract class BaseCrudResource<A extends AggregateRoot<I>, I, D> extends
         super();
     }
 
-    protected BaseCrudResource(Class<A> aggregateRootClass, Class<I> identifierClass, Class<D> representationClass) {
+    protected BaseCrudResource(Class<A> aggregateRootClass, Class<I> identifierClass,
+            Class<D> representationClass) {
         super(aggregateRootClass, identifierClass, representationClass);
     }
 }

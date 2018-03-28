@@ -50,10 +50,12 @@ public interface CreateResource<A extends AggregateRoot<I>, I, D> extends Resour
         try {
             getRepository().add(aggregate);
         } catch (AggregateExistsException e) {
-            throw new ClientErrorException(buildAggregateName(aggregate.getId()) + " already exists", 409);
+            throw new ClientErrorException(buildAggregateName(aggregate.getId()) + " already exists",
+                    409);
         }
 
-        return Response.created(uriInfo.getRequestUriBuilder().path(String.valueOf(aggregate.getId())).build())
+        return Response
+                .created(uriInfo.getRequestUriBuilder().path(String.valueOf(aggregate.getId())).build())
                 .entity(getFluentAssembler().assemble(aggregate).to(getRepresentationClass()))
                 .build();
     }

@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.crud.rest.fixtures.model;
+package org.seedstack.crud.rest.fixtures.model.customer;
 
 import org.seedstack.business.domain.BaseAggregateRoot;
 
@@ -18,16 +18,16 @@ public class Customer extends BaseAggregateRoot<CustomerId> {
         this.id = id;
     }
 
-    @Override
-    public CustomerId getId() {
-        return id;
-    }
-
     public int getAge() {
         return age;
     }
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public CustomerId getId() {
+        return id;
     }
 }

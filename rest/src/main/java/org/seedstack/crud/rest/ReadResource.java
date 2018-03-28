@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.seedstack.business.domain.AggregateRoot;
+import org.seedstack.business.domain.Repository;
 import org.seedstack.business.pagination.Slice;
 import org.seedstack.business.pagination.dsl.LimitPicker;
 import org.seedstack.business.pagination.dsl.PaginationTypePicker;
@@ -36,49 +37,30 @@ import org.seedstack.business.specification.Specification;
  */
 public interface ReadResource<A extends AggregateRoot<I>, I, D> extends Resource<A, I, D> {
     /**
-     * The method that implements REST aggregate listing. Supports pagination through {@link PaginationParams} query
-     * parameters.
+     * Apply a pagination limit if present in the given pagination parameters.
      *
-     * @param params the optional pagination parameters.
-     * @return the serialized stream of aggregates, enveloped in a pagination wrapper if necessary.
+     * @param params      the pagination parameters.
+     * @param limitPicker the {@link org.seedstack.business.pagination.dsl.Paginator} DSL element to apply the
+     *                    limit to.
+     * @param <S>         the type of the paginated result.
+     * @return the {@link org.seedstack.business.pagination.dsl.Paginator} DSL element to continue
+     *         with.
      */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    default Object list(@BeanParam PaginationParams params) {
-        final Specification<A> filterSpec = Specification.any();
-
-        if (params.isPaginating()) {
-            PaginationTypePicker<A> paginationTypePicker = getPaginator().paginate(getRepository());
-            if (params.isAttributeBased()) {
-                return getFluentAssembler().assemble(applyLimit(params, paginationTypePicker
-                        .byAttribute(params.getAttribute())
-                        .before(params.getValue()))
-                        .matching(filterSpec))
-                        .toSliceOf(getRepresentationClass());
-            } else if (params.isOffsetBased()) {
-                return getFluentAssembler().assemble(applyLimit(params, paginationTypePicker
-                        .byOffset(params.getOffset()))
-                        .matching(filterSpec))
-                        .toSliceOf(getRepresentationClass());
-            } else if (params.isPageBased()) {
-                return getFluentAssembler().assemble(applyLimit(params, paginationTypePicker
-                        .byPage(params.getPage()))
-                        .matching(filterSpec))
-                        .toPageOf(getRepresentationClass());
-            } else {
-                throw new IllegalArgumentException("Missing pagination parameters");
-            }
+    default <S extends Slice<A>> SpecificationPicker<S, A> applyLimit(
+            @BeanParam PaginationParams params,
+            LimitPicker<S, A> limitPicker) {
+        if (params.hasLimit()) {
+            return limitPicker.limit(params.getLimit());
         } else {
-            return getFluentAssembler().assemble(getRepository().get(filterSpec))
-                    .toStreamOf(getRepresentationClass());
+            return limitPicker;
         }
     }
 
     /**
      * The method that implements REST aggregate retrieval.
      *
-     * @param id the identifier of the aggregate to retrieve, passed as {@code /{id}} path parameter. If
-     *           the identifier type is a complex object, it must have a constructor taking a single
+     * @param id the identifier of the aggregate to retrieve, passed as {@code /{id}} path parameter.
+     *           If the identifier type is a complex object, it must have a constructor taking a single
      *           {@link String} parameter.
      * @return the representation of the retrieved aggregate.
      */
@@ -92,19 +74,50 @@ public interface ReadResource<A extends AggregateRoot<I>, I, D> extends Resource
     }
 
     /**
-     * Apply a pagination limit if present in the given pagination parameters.
+     * The method that implements REST aggregate listing. Supports pagination through
+     * {@link PaginationParams} query parameters.
      *
-     * @param params      the pagination parameters.
-     * @param limitPicker the {@link org.seedstack.business.pagination.dsl.Paginator} DSL element to apply the limit to.
-     * @param <S>         the type of the paginated result.
-     * @return the {@link org.seedstack.business.pagination.dsl.Paginator} DSL element to continue with.
+     * @param paginationParams the optional pagination parameters.
+     * @param sortParams       the optional sorting parameters.
+     * @return the serialized stream of aggregates, enveloped in a pagination wrapper if necessary.
      */
-    default <S extends Slice<A>> SpecificationPicker<S, A> applyLimit(@BeanParam PaginationParams params,
-            LimitPicker<S, A> limitPicker) {
-        if (params.hasLimit()) {
-            return limitPicker.limit(params.getLimit());
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    default Object list(@BeanParam PaginationParams paginationParams, @BeanParam SortParams sortParams) {
+        final Specification<A> filterSpec = Specification.any();
+
+        Repository.Option[] options;
+        if (sortParams.hasSort()) {
+            options = new Repository.Option[]{sortParams.buildSortOption()};
         } else {
-            return limitPicker;
+            options = new Repository.Option[0];
+        }
+
+        if (paginationParams.hasPagination()) {
+            PaginationTypePicker<A> paginationTypePicker = getPaginator().paginate(getRepository())
+                    .withOptions(options);
+            if (paginationParams.isAttributeBased()) {
+                return getFluentAssembler().assemble(applyLimit(paginationParams, paginationTypePicker
+                        .byAttribute(paginationParams.getAttribute())
+                        .after(paginationParams.getValue()))
+                        .matching(filterSpec))
+                        .toSliceOf(getRepresentationClass());
+            } else if (paginationParams.isOffsetBased()) {
+                return getFluentAssembler().assemble(applyLimit(paginationParams, paginationTypePicker
+                        .byOffset(paginationParams.getOffset()))
+                        .matching(filterSpec))
+                        .toSliceOf(getRepresentationClass());
+            } else if (paginationParams.isPageBased()) {
+                return getFluentAssembler().assemble(applyLimit(paginationParams, paginationTypePicker
+                        .byPage(paginationParams.getPage()))
+                        .matching(filterSpec))
+                        .toPageOf(getRepresentationClass());
+            } else {
+                throw new IllegalArgumentException("Missing pagination parameters");
+            }
+        } else {
+            return getFluentAssembler().assemble(getRepository().get(filterSpec, options))
+                    .toStreamOf(getRepresentationClass());
         }
     }
 }

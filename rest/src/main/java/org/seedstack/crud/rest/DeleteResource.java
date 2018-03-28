@@ -28,11 +28,13 @@ import org.seedstack.business.domain.AggregateRoot;
  * @see Resource
  */
 public interface DeleteResource<A extends AggregateRoot<I>, I, D> extends Resource<A, I, D> {
+
     /**
      * The method that implements REST aggregate deletion.
      *
-     * @param id the identifier of the aggregate to delete, passed as {@code /{id}} path parameter. If the identifier
-     *           type is a complex object, it must have a constructor taking a single {@link String} parameter.
+     * @param id the identifier of the aggregate to delete, passed as {@code /{id}} path parameter. If
+     *           the identifier type is a complex object, it must have a constructor taking a single
+     *           {@link String} parameter.
      */
     @DELETE
     @Path("/{id}")

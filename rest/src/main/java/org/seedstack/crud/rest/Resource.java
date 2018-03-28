@@ -26,32 +26,21 @@ import org.seedstack.business.pagination.dsl.Paginator;
  */
 public interface Resource<A extends AggregateRoot<I>, I, D> {
     /**
+     * Builds the standardized name of the aggregate for a particular id.
+     *
+     * @param id the aggregate identifier.
+     * @return the aggregate name.
+     */
+    default String buildAggregateName(I id) {
+        return getAggregateRootClass().getSimpleName() + "[" + id + "]";
+    }
+
+    /**
      * Returns the aggregate root class managed by the resource.
      *
      * @return the aggregate root class.
      */
     Class<A> getAggregateRootClass();
-
-    /**
-     * Returns the aggregate root identifier class managed by the resource.
-     *
-     * @return the aggregate root identifier class.
-     */
-    Class<I> getIdentifierClass();
-
-    /**
-     * Returns the representation class managed by the resource.
-     *
-     * @return the representation class.
-     */
-    Class<D> getRepresentationClass();
-
-    /**
-     * Returns the repository where to find aggregates managed by the resource.
-     *
-     * @return the repository of managed aggregates.
-     */
-    Repository<A, I> getRepository();
 
     /**
      * Returns the {@link FluentAssembler} implementation used by the resource.
@@ -61,6 +50,13 @@ public interface Resource<A extends AggregateRoot<I>, I, D> {
     FluentAssembler getFluentAssembler();
 
     /**
+     * Returns the aggregate root identifier class managed by the resource.
+     *
+     * @return the aggregate root identifier class.
+     */
+    Class<I> getIdentifierClass();
+
+    /**
      * Returns the {@link Paginator} implementation used by the resource.
      *
      * @return the {@link Paginator} implementation.
@@ -68,12 +64,16 @@ public interface Resource<A extends AggregateRoot<I>, I, D> {
     Paginator getPaginator();
 
     /**
-     * Builds the standardized name of the aggregate for a particular id.
+     * Returns the repository where to find aggregates managed by the resource.
      *
-     * @param id the aggregate identifier.
-     * @return the aggregate name.
+     * @return the repository of managed aggregates.
      */
-    default String buildAggregateName(I id) {
-        return getAggregateRootClass().getSimpleName() + "[" + id + "]";
-    }
+    Repository<A, I> getRepository();
+
+    /**
+     * Returns the representation class managed by the resource.
+     *
+     * @return the representation class.
+     */
+    Class<D> getRepresentationClass();
 }
