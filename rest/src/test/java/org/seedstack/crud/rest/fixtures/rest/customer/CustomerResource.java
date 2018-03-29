@@ -9,11 +9,12 @@
 package org.seedstack.crud.rest.fixtures.rest.customer;
 
 import javax.ws.rs.Path;
+
 import org.seedstack.crud.rest.BaseCrudResource;
 import org.seedstack.crud.rest.fixtures.model.customer.Customer;
 import org.seedstack.crud.rest.fixtures.model.customer.CustomerId;
 
 @Path("/customers")
 public class CustomerResource
-        extends BaseCrudResource<Customer, CustomerId, CustomerRepresentation> {
+    extends BaseCrudResource<Customer, CustomerId, CustomerRepresentation> {
 }

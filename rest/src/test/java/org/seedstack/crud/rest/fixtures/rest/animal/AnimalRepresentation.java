@@ -13,28 +13,28 @@ import org.seedstack.business.assembler.FactoryArgument;
 import org.seedstack.crud.rest.fixtures.model.animal.AnimalId;
 
 public abstract class AnimalRepresentation {
-    private String name;
-    private Long daysInHome;
+  private String name;
+  private Long daysInHome;
 
-    public String getName() {
-        return name;
-    }
+  public Long getDaysInHome() {
+    return daysInHome;
+  }
 
-    public void setName(String birdId) {
-        this.name = birdId;
-    }
+  @AggregateId
+  @FactoryArgument
+  public AnimalId getId() {
+    return new AnimalId(name);
+  }
 
-    @AggregateId
-    @FactoryArgument
-    public AnimalId getId() {
-        return new AnimalId(name);
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Long getDaysInHome() {
-        return daysInHome;
-    }
+  public void setDaysInHome(Long daysInHome) {
+    this.daysInHome = daysInHome;
+  }
 
-    public void setDaysInHome(Long daysInHome) {
-        this.daysInHome = daysInHome;
-    }
+  public void setName(String birdId) {
+    name = birdId;
+  }
 }

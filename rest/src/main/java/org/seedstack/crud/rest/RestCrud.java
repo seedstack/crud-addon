@@ -20,40 +20,40 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 public @interface RestCrud {
-    /**
-     * Defines if the generated resource should allow creation.
-     *
-     * @return true if creation is allowed, false otherwise.
-     */
-    boolean create() default true;
+  /**
+   * Defines if the generated resource should allow creation.
+   *
+   * @return true if creation is allowed, false otherwise.
+   */
+  boolean create() default true;
 
-    /**
-     * Defines if the generated resource should allow deletion.
-     *
-     * @return true if deletion is allowed, false otherwise.
-     */
-    boolean delete() default true;
+  /**
+   * Defines if the generated resource should allow deletion.
+   *
+   * @return true if deletion is allowed, false otherwise.
+   */
+  boolean delete() default true;
 
-    /**
-     * Defines if the generated resource should allow reading.
-     *
-     * @return true if reading is allowed, false otherwise.
-     */
-    boolean read() default true;
+  /**
+   * Defines if the generated resource should allow reading.
+   *
+   * @return true if reading is allowed, false otherwise.
+   */
+  boolean read() default true;
 
-    /**
-     * Defines if the generated resource should allow updating.
-     *
-     * @return true if updating is allowed, false otherwise.
-     */
-    boolean update() default true;
+  /**
+   * Defines if the generated resource should allow updating.
+   *
+   * @return true if updating is allowed, false otherwise.
+   */
+  boolean update() default true;
 
-    /**
-     * The path the CRUD resource should be exposed on.
-     *
-     * @return the resource path.
-     */
-    String value() default "";
+  /**
+   * The path the CRUD resource should be exposed on.
+   *
+   * @return the resource path.
+   */
+  String value() default "";
 }

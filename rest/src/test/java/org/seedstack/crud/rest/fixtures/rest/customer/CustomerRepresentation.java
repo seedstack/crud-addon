@@ -16,37 +16,37 @@ import org.seedstack.crud.rest.fixtures.model.customer.CustomerId;
 
 @DtoOf(Customer.class)
 public class CustomerRepresentation {
-    private int age;
-    private String firstName;
-    private String lastName;
+  private int age;
+  private String firstName;
+  private String lastName;
 
-    public int getAge() {
-        return age;
-    }
+  public int getAge() {
+    return age;
+  }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+  @AggregateId
+  @FactoryArgument
+  public CustomerId getCustomerId() {
+    return new CustomerId(firstName, lastName);
+  }
 
-    @AggregateId
-    @FactoryArgument
-    public CustomerId getCustomerId() {
-        return new CustomerId(firstName, lastName);
-    }
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public String getFirstName() {
-        return firstName;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public void setAge(int age) {
+    this.age = age;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 }
