@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 
 import javax.inject.Inject;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,116 +30,119 @@ import org.seedstack.seed.undertow.LaunchWithUndertow;
 @RunWith(SeedITRunner.class)
 @LaunchWithUndertow
 public class ExplicitResourceIT {
-    @Inject
-    private Repository<Customer, CustomerId> customerRepository;
+  @Inject
+  private Repository<Customer, CustomerId> customerRepository;
 
-    @Configuration("web.runtime.baseUrl")
-    private String url;
+  @Configuration("web.runtime.baseUrl")
+  private String url;
 
-    @Before
-    public void setUp() {
-        customerRepository.add(new Customer(new CustomerId("Robert", "SMITH")));
-        customerRepository.add(new Customer(new CustomerId("Jeanne", "O'GRADY")));
-        customerRepository.add(new Customer(new CustomerId("Michael", "JONES")));
-    }
+  @Test
+  public void attributePaginatedList() {
+    when().get(url + "customers?sort=id.firstName&attribute=id.firstName&value=Jeanne&limit=2")
+        .then()
+        .statusCode(200)
+        .body("size", equalTo(2))
+        .body("items", hasSize(2))
+        .body("items.firstName", contains("Michael", "Robert"));
+  }
 
-    @After
-    public void tearDown() {
-        customerRepository.clear();
-    }
+  @Test
+  public void create() {
+    given().body("{\"firstName\":\"Tara\", \"lastName\":\"JOHNSON\"}")
+        .contentType("application/json")
+        .when()
+        .post(url + "customers")
+        .then()
+        .statusCode(201)
+        .header("Location", url + "customers/Tara%20JOHNSON");
+  }
 
-    @Test
-    public void create() {
-        given().body("{\"firstName\":\"Tara\", \"lastName\":\"JOHNSON\"}")
-                .contentType("application/json")
-                .when()
-                .post(url + "customers")
-                .then()
-                .statusCode(201)
-                .header("Location", url + "customers/Tara%20JOHNSON");
-    }
+  @Test
+  public void delete() {
+    when()
+        .delete(url + "customers/Robert DENIRO")
+        .then()
+        .statusCode(404);
+    when()
+        .get(url + "customers/Robert SMITH")
+        .then()
+        .statusCode(200);
+    when()
+        .delete(url + "customers/Robert SMITH")
+        .then()
+        .statusCode(204);
+    when()
+        .get(url + "customers/Robert SMITH")
+        .then()
+        .statusCode(404);
+  }
 
-    @Test
-    public void delete() {
-        when()
-                .delete(url + "customers/Robert DENIRO")
-                .then()
-                .statusCode(404);
-        when()
-                .get(url + "customers/Robert SMITH")
-                .then()
-                .statusCode(200);
-        when()
-                .delete(url + "customers/Robert SMITH")
-                .then()
-                .statusCode(204);
-        when()
-                .get(url + "customers/Robert SMITH")
-                .then()
-                .statusCode(404);
-    }
+  @Test
+  public void get() {
+    when().get(url + "customers/Robert SMITH")
+        .then()
+        .statusCode(200)
+        .body("firstName", equalTo("Robert"))
+        .body("lastName", equalTo("SMITH"));
+  }
 
-    @Test
-    public void update() {
-        given().body("{\"firstName\":\"Robert\", \"lastName\":\"SMITH\", \"age\": 35}")
-                .contentType("application/json")
-                .when()
-                .put(url + "customers/Robert SMITH")
-                .then()
-                .statusCode(200)
-                .body("firstName", equalTo("Robert"))
-                .body("lastName", equalTo("SMITH"))
-                .body("age", equalTo(35));
-    }
+  @Test
+  public void list() {
+    when().get(url + "customers?sort=id.firstName")
+        .then()
+        .statusCode(200)
+        .body("$", hasSize(3))
+        .body("firstName", contains("Jeanne", "Michael", "Robert"));
+  }
 
-    @Test
-    public void get() {
-        when().get(url + "customers/Robert SMITH")
-                .then()
-                .statusCode(200)
-                .body("firstName", equalTo("Robert"))
-                .body("lastName", equalTo("SMITH"));
-    }
+  @Test
+  public void offsetPaginatedList() {
+    when().get(url + "customers?sort=id.firstName&offset=1&limit=2")
+        .then()
+        .statusCode(200)
+        .body("size", equalTo(2))
+        .body("items", hasSize(2))
+        .body("items.firstName", contains("Michael", "Robert"));
+  }
 
-    @Test
-    public void list() {
-        when().get(url + "customers?sort=id.firstName")
-                .then()
-                .statusCode(200)
-                .body("$", hasSize(3))
-                .body("firstName", contains("Jeanne", "Michael", "Robert"));
-    }
+  @Test
+  public void pagePaginatedList() {
+    when().get(url + "customers?sort=id.firstName&page=1&limit=2")
+        .then()
+        .statusCode(200)
+        .body("size", equalTo(2))
+        .body("index", equalTo(1))
+        .body("maxSize", equalTo(2))
+        .body("totalSize", equalTo(3))
+        .body("items", hasSize(2))
+        .body("items.firstName", contains("Jeanne", "Michael"));
+  }
 
-    @Test
-    public void offsetPaginatedList() {
-        when().get(url + "customers?sort=id.firstName&offset=1&limit=2")
-                .then()
-                .statusCode(200)
-                .body("size", equalTo(2))
-                .body("items", hasSize(2))
-                .body("items.firstName", contains("Michael", "Robert"));
-    }
+  /***
+   * <p> Setup customer repository for integration tests. </p>
+   */
+  @Before
+  public void setUp() {
+    customerRepository.add(new Customer(new CustomerId("Robert", "SMITH")));
+    customerRepository.add(new Customer(new CustomerId("Jeanne", "O'GRADY")));
+    customerRepository.add(new Customer(new CustomerId("Michael", "JONES")));
+  }
 
-    @Test
-    public void pagePaginatedList() {
-        when().get(url + "customers?sort=id.firstName&page=1&limit=2")
-                .then()
-                .statusCode(200)
-                .body("size", equalTo(2))
-                .body("index", equalTo(1))
-                .body("maxSize", equalTo(2))
-                .body("totalSize", equalTo(3))
-                .body("items", hasSize(2))
-                .body("items.firstName", contains("Jeanne", "Michael"));
-    }
+  @After
+  public void tearDown() {
+    customerRepository.clear();
+  }
 
-    @Test
-    public void attributePaginatedList() {
-        when().get(url + "customers?sort=id.firstName&attribute=id.firstName&value=Jeanne&limit=2")
-                .then()
-                .statusCode(200)
-                .body("size", equalTo(2))
-                .body("items", hasSize(2))
-                .body("items.firstName", contains("Michael", "Robert"));
-    }
+  @Test
+  public void update() {
+    given().body("{\"firstName\":\"Robert\", \"lastName\":\"SMITH\", \"age\": 35}")
+        .contentType("application/json")
+        .when()
+        .put(url + "customers/Robert SMITH")
+        .then()
+        .statusCode(200)
+        .body("firstName", equalTo("Robert"))
+        .body("lastName", equalTo("SMITH"))
+        .body("age", equalTo(35));
+  }
 }

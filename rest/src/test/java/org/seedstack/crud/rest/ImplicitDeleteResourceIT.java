@@ -11,6 +11,7 @@ package org.seedstack.crud.rest;
 import static io.restassured.RestAssured.when;
 
 import javax.inject.Inject;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,39 +26,44 @@ import org.seedstack.seed.undertow.LaunchWithUndertow;
 @RunWith(SeedITRunner.class)
 @LaunchWithUndertow
 public class ImplicitDeleteResourceIT {
-    @Configuration("web.runtime.baseUrl")
-    private String url;
+  @Configuration("web.runtime.baseUrl")
+  private String url;
 
-    @Inject
-    private Repository<Dog, AnimalId> dogRepository;
+  @Inject
+  private Repository<Dog, AnimalId> dogRepository;
 
-    @Before
-    public void setUp() {
-        dogRepository.add(new Dog(new AnimalId("snoopy")));
-    }
+  @Before
+  public void setUp() {
+    dogRepository.add(new Dog(new AnimalId("snoopy")));
+  }
 
-    @After
-    public void tearDown() {
-        dogRepository.clear();
-    }
+  @After
+  public void tearDown() {
+    dogRepository.clear();
+  }
 
-    @Test
-    public void delete() {
-        when()
-                .delete(url + "dogs/pluto")
-                .then()
-                .statusCode(404);
-        when()
-                .get(url + "dogs/snoopy")
-                .then()
-                .statusCode(200);
-        when()
-                .delete(url + "dogs/snoopy")
-                .then()
-                .statusCode(204);
-        when()
-                .get(url + "dogs/snoopy")
-                .then()
-                .statusCode(404);
-    }
+  @Test
+  public void testDeleteSuccess() {
+    when()
+        .get(url + "Dog/snoopy")
+        .then()
+        .statusCode(200);
+    when()
+        .delete(url + "Dog/snoopy")
+        .then()
+        .statusCode(204);
+  }
+
+  @Test
+  public void testDeleteInexistent() throws Exception {
+    when()
+        .get(url + "Dog/scoobydoo")
+        .then()
+        .statusCode(404);
+    when()
+        .delete(url + "Dog/scoobydoo")
+        .then()
+        .statusCode(404);
+  }
+
 }

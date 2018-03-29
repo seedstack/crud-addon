@@ -12,7 +12,8 @@ import org.seedstack.business.assembler.DtoOf;
 import org.seedstack.crud.rest.RestCrud;
 import org.seedstack.crud.rest.fixtures.model.animal.Dog;
 
+//Value left uncovered on purpose to test resource name generation logic
 @DtoOf(Dog.class)
-@RestCrud(value = "dogs", create = false, read = true, update = false, delete = true)
+@RestCrud(create = false, read = true, update = false, delete = true)
 public class DogRepresentation extends AnimalRepresentation {
 }

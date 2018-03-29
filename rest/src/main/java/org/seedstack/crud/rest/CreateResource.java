@@ -16,15 +16,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
 import org.seedstack.business.domain.AggregateExistsException;
 import org.seedstack.business.domain.AggregateRoot;
 
 /**
  * Specialization of {@link Resource} for creating aggregates (the C of CRUD).
  *
- * @param <A> the aggregate root type.
- * @param <I> the aggregate root identifier type.
- * @param <D> the representation type.
+ * @param <A>
+ *          the aggregate root type.
+ * @param <I>
+ *          the aggregate root identifier type.
+ * @param <D>
+ *          the representation type.
  * @see CreateResource
  * @see ReadResource
  * @see UpdateResource
@@ -32,31 +36,33 @@ import org.seedstack.business.domain.AggregateRoot;
  * @see Resource
  */
 public interface CreateResource<A extends AggregateRoot<I>, I, D> extends Resource<A, I, D> {
-    /**
-     * The method that implements REST aggregate creation.
-     *
-     * @param representation the representation of the aggregate as JSON request body.
-     * @param uriInfo        context injected by JAX-RS.
-     * @return the JAX-RS {@link Response}.
-     */
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    default Response create(D representation, @Context UriInfo uriInfo) {
-        A aggregate = getFluentAssembler().merge(representation)
-                .into(getAggregateRootClass())
-                .fromFactory();
+  /**
+   * The method that implements REST aggregate creation.
+   *
+   * @param representation
+   *          the representation of the aggregate as JSON request body.
+   * @param uriInfo
+   *          context injected by JAX-RS.
+   * @return the JAX-RS {@link Response}.
+   */
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  default Response create(D representation, @Context UriInfo uriInfo) {
+    A aggregate = getFluentAssembler().merge(representation)
+        .into(getAggregateRootClass())
+        .fromFactory();
 
-        try {
-            getRepository().add(aggregate);
-        } catch (AggregateExistsException e) {
-            throw new ClientErrorException(buildAggregateName(aggregate.getId()) + " already exists",
-                    409);
-        }
-
-        return Response
-                .created(uriInfo.getRequestUriBuilder().path(String.valueOf(aggregate.getId())).build())
-                .entity(getFluentAssembler().assemble(aggregate).to(getRepresentationClass()))
-                .build();
+    try {
+      getRepository().add(aggregate);
+    } catch (AggregateExistsException e) {
+      throw new ClientErrorException(buildAggregateName(aggregate.getId()) + " already exists",
+          409);
     }
+
+    return Response
+        .created(uriInfo.getRequestUriBuilder().path(String.valueOf(aggregate.getId())).build())
+        .entity(getFluentAssembler().assemble(aggregate).to(getRepresentationClass()))
+        .build();
+  }
 }

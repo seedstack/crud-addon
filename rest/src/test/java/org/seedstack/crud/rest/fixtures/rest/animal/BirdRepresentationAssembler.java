@@ -10,5 +10,6 @@ package org.seedstack.crud.rest.fixtures.rest.animal;
 
 import org.seedstack.crud.rest.fixtures.model.animal.Bird;
 
-public class BirdRepresentationAssembler extends AnimalRepresentationAssembler<Bird, BirdRepresentation> {
+public class BirdRepresentationAssembler
+    extends AnimalRepresentationAssembler<Bird, BirdRepresentation> {
 }

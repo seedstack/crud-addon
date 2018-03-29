@@ -12,17 +12,17 @@ import org.seedstack.business.assembler.BaseAssembler;
 import org.seedstack.crud.rest.fixtures.model.customer.Customer;
 
 public class CustomRepresentationAssembler extends BaseAssembler<Customer, CustomerRepresentation> {
-    @Override
-    public void mergeAggregateIntoDto(Customer customer,
-            CustomerRepresentation customerRepresentation) {
-        customerRepresentation.setFirstName(customer.getId().getFirstName());
-        customerRepresentation.setLastName(customer.getId().getLastName());
-        customerRepresentation.setAge(customer.getAge());
-    }
+  @Override
+  public void mergeAggregateIntoDto(Customer customer,
+      CustomerRepresentation customerRepresentation) {
+    customerRepresentation.setFirstName(customer.getId().getFirstName());
+    customerRepresentation.setLastName(customer.getId().getLastName());
+    customerRepresentation.setAge(customer.getAge());
+  }
 
-    @Override
-    public void mergeDtoIntoAggregate(CustomerRepresentation customerRepresentation,
-            Customer customer) {
-        customer.setAge(customerRepresentation.getAge());
-    }
+  @Override
+  public void mergeDtoIntoAggregate(CustomerRepresentation customerRepresentation,
+      Customer customer) {
+    customer.setAge(customerRepresentation.getAge());
+  }
 }

@@ -10,5 +10,6 @@ package org.seedstack.crud.rest.fixtures.rest.animal;
 
 import org.seedstack.crud.rest.fixtures.model.animal.Cat;
 
-public class CatRepresentationAssembler extends AnimalRepresentationAssembler<Cat, CatRepresentation> {
+public class CatRepresentationAssembler
+    extends AnimalRepresentationAssembler<Cat, CatRepresentation> {
 }
