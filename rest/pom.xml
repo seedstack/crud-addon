@@ -27,14 +27,14 @@
 			<version>${seed.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.seedstack.seed</groupId>
-			<artifactId>seed-rest-specs</artifactId>
-			<version>${seed.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.seedstack.business</groupId>
 			<artifactId>business-core</artifactId>
 			<version>${business.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seedstack.seed</groupId>
+			<artifactId>seed-rest-specs</artifactId>
+			<version>${seed.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
