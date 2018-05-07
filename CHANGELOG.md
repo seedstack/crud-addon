@@ -1,5 +1,6 @@
-# Version 1.0.0 (2018-04-??)
+# Version 1.0.0 (2018-05-07)
 
 * [new] Initial version.
-* [new] Base class to generate basic CRUD Resources with annotations
-* [new] Automatic resource declaration using @RestCrud on a Dto class
+* [new] REST: trait-style interfaces for each CRUD operation, allowing arbitrary combinations. 
+* [new] REST: base-class combining all CRUD operations. 
+* [new] REST: implicit resource generation by annotating a DTO class with `@RestCrud`.
