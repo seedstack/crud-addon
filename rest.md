@@ -31,7 +31,7 @@ To be exposed as a CRUD REST API, the DTO:
 * Must have a [default]({{< ref "docs/business/assemblers.md#default-assembler" >}}) or a 
 [custom]({{< ref "docs/business/assemblers.md#custom-assembler" >}}) assembler that can handle the mapping to its 
 aggregate and back. 
-* Must be properly annotated so the [fluent assembler DSL]({{< ref "docs/business/fluent-assembler.md" >}}) can the mapping automatically.  
+* Must be properly annotated so the [fluent assembler DSL]({{< ref "docs/business/fluent-assembler.md" >}}) can do the mapping automatically.  
 
 As an example consider the class `CustomerDto` below, corresponding to the `Customer` aggregate and annotated so the fluent
 assembler can do the mapping automatically:
@@ -87,4 +87,50 @@ boolean parameters.
 
 ### Custom resource
 
-Coming soon... 
+To customize the default CRUD behavior, you have to create a resource class extending {{< java "org.seedstack.crud.rest.BaseResource" >}}:
+
+```java
+@Path("/customers")
+public class SomeResource extends BaseResource {
+    
+}
+``` 
+
+{{% callout warning %}}
+Solely extending {{< java "org.seedstack.crud.rest.BaseResource" >}}, by itself, will not provide any behavior. You
+have two choices, described below, to add CRUD operation(s) to your resource class.
+{{% /callout %}}
+
+#### Interfaces
+
+You can implement any combination of the following four CRUD interfaces: {{< java "org.seedstack.crud.rest.CreateResource" >}},
+{{< java "org.seedstack.crud.rest.ReadResource" >}}, {{< java "org.seedstack.crud.rest.UpdateResource" >}} and {{< java "org.seedstack.crud.rest.DeleteResource" >}}:
+
+```java
+@Path("/customers")
+public class SomeResource extends BaseResource implements ReadResource {
+    // Override inherited operations or add custom operations here 
+}
+``` 
+
+{{% callout tips %}}
+Each interface provides the behavior for the corresponding operation. You can then augment or override this behavior 
+with your own operations.  
+{{% /callout %}}
+
+#### Base class
+
+You can extend the {{< java "org.seedstack.crud.rest.BaseCrudResource" >}} class instead, which in turn implements all four
+interfaces described in the [section above](#interfaces):
+
+```java
+@Path("/customers")
+public class SomeResource extends BaseCrudResource {
+    // Override inherited operations or add custom operations here 
+}
+``` 
+
+{{% callout tips %}}
+The base class provides the behavior for the all CRUD operations. You can then augment or override this behavior 
+with your own operations.  
+{{% /callout %}}
