@@ -1,3 +1,7 @@
+# Version 1.0.1 (2020-08-05)
+
+* [chg] Updated for seed 3.10+
+
 # Version 1.0.0 (2018-05-07)
 
 * [new] Initial version.

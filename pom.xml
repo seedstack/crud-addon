@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2013-2018, The SeedStack authors <http://seedstack.org>
+    Copyright © 2013-2020, The SeedStack authors <http://seedstack.org>
 
     This Source Code Form is subject to the terms of the Mozilla Public
     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,17 +14,17 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.3.1</version>
+        <version>3.4.9-SNAPSHOT</version>
     </parent>
 
     <groupId>org.seedstack.addons.crud</groupId>
     <artifactId>crud</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <seed.version>3.6.0</seed.version>
-        <business.version>4.2.1</business.version>
+        <seed.version>3.10.0-SNAPSHOT</seed.version>
+        <business.version>4.3.2-SNAPSHOT</business.version>
         <modelmapper-addon.version>1.0.0</modelmapper-addon.version>
 
         <compatibility.skip>true</compatibility.skip>
